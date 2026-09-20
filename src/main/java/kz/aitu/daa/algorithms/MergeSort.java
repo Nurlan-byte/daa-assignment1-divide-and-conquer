@@ -4,6 +4,8 @@ import kz.aitu.daa.metrics.Metrics;
 
 public final class MergeSort {
 
+    public static final int CUTOFF = 15;
+
     private MergeSort() {
     }
 
@@ -14,33 +16,32 @@ public final class MergeSort {
         if (a.length < 2) {
             return;
         }
-        sort(a, 0, a.length - 1, m);
+        int[] buffer = new int[a.length];
+        sort(a, buffer, 0, a.length - 1, m);
     }
 
-    private static void sort(int[] a, int lo, int hi, Metrics m) {
-        if (lo >= hi) {
+    private static void sort(int[] a, int[] buffer, int lo, int hi, Metrics m) {
+        if (hi - lo + 1 <= CUTOFF) {
+            InsertionSort.sort(a, lo, hi, m);
             return;
         }
         int mid = lo + (hi - lo) / 2;
 
-        sort(a, lo, mid, m);
-        sort(a, mid + 1, hi, m);
-        merge(a, lo, mid, hi, m);
+        sort(a, buffer, lo, mid, m);
+        sort(a, buffer, mid + 1, hi, m);
+        merge(a, buffer, lo, mid, hi, m);
     }
 
-    private static void merge(int[] a, int lo, int mid, int hi, Metrics m) {
-        int[] buffer = new int[hi - lo + 1]; // <-- new array on every merge call
-        System.arraycopy(a, lo, buffer, 0, buffer.length);
+    private static void merge(int[] a, int[] buffer, int lo, int mid, int hi, Metrics m) {
+        System.arraycopy(a, lo, buffer, lo, hi - lo + 1);
 
-        int i = 0; // index into the left half of the buffer
-        int j = mid - lo + 1; // index into the right half of the buffer
-        int leftEnd = mid - lo;
-        int rightEnd = hi - lo;
+        int i = lo;
+        int j = mid + 1;
 
         for (int k = lo; k <= hi; k++) {
-            if (i > leftEnd) {
+            if (i > mid) {
                 a[k] = buffer[j++];
-            } else if (j > rightEnd) {
+            } else if (j > hi) {
                 a[k] = buffer[i++];
             } else {
                 m.incComparisons();
