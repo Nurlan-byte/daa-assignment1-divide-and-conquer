@@ -21,15 +21,20 @@ public final class MergeSort {
     }
 
     private static void sort(int[] a, int[] buffer, int lo, int hi, Metrics m) {
-        if (hi - lo + 1 <= CUTOFF) {
-            InsertionSort.sort(a, lo, hi, m);
-            return;
-        }
-        int mid = lo + (hi - lo) / 2;
+        m.enterRecursion();
+        try {
+            if (hi - lo + 1 <= CUTOFF) {
+                InsertionSort.sort(a, lo, hi, m);
+                return;
+            }
+            int mid = lo + (hi - lo) / 2;
 
-        sort(a, buffer, lo, mid, m);
-        sort(a, buffer, mid + 1, hi, m);
-        merge(a, buffer, lo, mid, hi, m);
+            sort(a, buffer, lo, mid, m);
+            sort(a, buffer, mid + 1, hi, m);
+            merge(a, buffer, lo, mid, hi, m);
+        } finally {
+            m.exitRecursion();
+        }
     }
 
     private static void merge(int[] a, int[] buffer, int lo, int mid, int hi, Metrics m) {
