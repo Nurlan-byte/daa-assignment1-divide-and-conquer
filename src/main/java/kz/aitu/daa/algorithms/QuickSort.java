@@ -28,17 +28,27 @@ public final class QuickSort {
     private static void sort(int[] a, int lo, int hi, Metrics m, Random rnd) {
         m.enterRecursion();
         try {
-            if (hi - lo + 1 <= CUTOFF) {
-                InsertionSort.sort(a, lo, hi, m);
-                return;
+            while (lo < hi) {
+                if (hi - lo + 1 <= CUTOFF) {
+                    InsertionSort.sort(a, lo, hi, m);
+                    return;
+                }
+
+                long parts = Partition.randomPartition3(a, lo, hi, rnd, m);
+                int lt = Partition.lt(parts);
+                int gt = Partition.gt(parts);
+
+                int leftSize = lt - lo;
+                int rightSize = hi - gt;
+
+                if (leftSize < rightSize) {
+                    sort(a, lo, lt - 1, m, rnd);
+                    lo = gt + 1;
+                } else {
+                    sort(a, gt + 1, hi, m, rnd);
+                    hi = lt - 1;
+                }
             }
-
-            long parts = Partition.randomPartition3(a, lo, hi, rnd, m);
-            int lt = Partition.lt(parts);
-            int gt = Partition.gt(parts);
-
-            sort(a, lo, lt - 1, m, rnd);
-            sort(a, gt + 1, hi, m, rnd);
         } finally {
             m.exitRecursion();
         }
