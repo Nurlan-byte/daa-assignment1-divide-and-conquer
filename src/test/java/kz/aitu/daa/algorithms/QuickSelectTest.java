@@ -40,7 +40,7 @@ class QuickSelectTest {
         int n = 200;
         int[] a = new int[n];
         for (int i = 0; i < n; i++) {
-            a[i] = rnd.nextInt(50); // many duplicates on purpose
+            a[i] = rnd.nextInt(50);
         }
         int[] sorted = a.clone();
         Arrays.sort(sorted);

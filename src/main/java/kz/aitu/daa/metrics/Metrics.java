@@ -51,14 +51,14 @@ public class Metrics {
         comparisons = 0;
         startNanos = 0;
         elapsedNanos = 0;
-        depth = 0;        // NEW
-        maxDepth = 0;     // NEW
+        depth = 0;
+        maxDepth = 0;
     }
 
     @Override
     public String toString() {
         return "comparisons=" + comparisons
-                + ", maxDepth=" + maxDepth        // NEW
+                + ", maxDepth=" + maxDepth
                 + ", time=" + timeMs() + " ms";
     }
 }
